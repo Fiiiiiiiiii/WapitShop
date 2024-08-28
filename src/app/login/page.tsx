@@ -19,7 +19,7 @@ const LoginPage = () => {
 
   const isLoggedIn = wixClient.auth.loggedIn();
 
-  console.log(isLoggedIn);
+  // console.log(isLoggedIn);
 
   if (isLoggedIn) {
     router.push("/");
@@ -39,21 +39,21 @@ const LoginPage = () => {
 
   const formTitle =
     mode === MODE.LOGIN
-      ? "Log in"
+      ? "Přihlášení"
       : mode === MODE.REGISTER
-      ? "Register"
+      ? "Registrace"
       : mode === MODE.RESET_PASSWORD
-      ? "Reset your Password"
-      : "Verify your email";
+      ? "Reset hesla"
+      : "Verifikace emailu";
 
   const buttonTitle =
     mode === MODE.LOGIN
-      ? "Login"
+      ? "Přihlásit"
       : mode === MODE.REGISTER
-      ? "Register"
+      ? "Registrovat"
       : mode === MODE.RESET_PASSWORD
-      ? "Reset"
-      : "Verify";
+      ? "Resetovat heslo"
+      : "Ověřit email";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,7 +93,7 @@ const LoginPage = () => {
           break;
       }
 
-      console.log(response);
+      // console.log(response);
 
       switch (response?.loginState) {
         case LoginState.SUCCESS:
@@ -136,7 +136,7 @@ const LoginPage = () => {
       }
     } catch (err) {
       console.log(err);
-      setError("Something went wrong");
+      setError("Něco se pokazilo.");
     } finally {
       setIsLoading(false);
     }

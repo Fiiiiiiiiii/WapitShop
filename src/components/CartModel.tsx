@@ -15,7 +15,7 @@ const CartModel = () => {
   console.log(cart);
 
   return (
-    <div className="w-[350px] absolute p-5 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20">
+    <div className="w-[380px] absolute p-5 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20">
       {!cart.lineItems ? (
         <div className="">Košík je prázdný</div>
       ) : (
@@ -40,7 +40,7 @@ const CartModel = () => {
                     alt=""
                     width={72}
                     height={96}
-                    className="object-cover rounded-md"
+                    className="object-contain rounded-md"
                   />
                 )}
                 <div className="flex flex-col justify-between w-full">
@@ -48,28 +48,30 @@ const CartModel = () => {
                   <div className="">
                     {/* TITLE */}
                     <div className="flex items-center justify-between gap-8">
-                      <h3 className="font-semibold">
+                      <h3 className="font-semibold text-sm">
                         {item.productName?.original}
                       </h3>
                       <div className="p-1 bg-gray-50 rounded-sm flex items-center gap-2">
                         {item.quantity && item.quantity > 1 && (
                           <div className="text-xs text-green-500">
-                            {item.quantity} x
+                            {item.quantity}&nbsp;x
                           </div>
                         )}
                         {item.price?.amount},-
                       </div>
                     </div>
-                    {/* DESC */}
-                    <div className="text-sm text-gray-500">
-                      {item.availability?.status}
-                    </div>
+                  </div>
+                  {/* DESC */}
+                  <div className="text-xs text-gray-500">
+                    {item.availability?.status}
                   </div>
                   {/* BOTTOM */}
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Mnž. {item.quantity}</span>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500 text-xs">
+                      Mnž. {item.quantity}
+                    </span>
                     <span
-                      className="text-blue-500"
+                      className="text-blue-600 text-sm"
                       style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
                       onClick={() => removeItem(wixClient, item._id!)}
                     >

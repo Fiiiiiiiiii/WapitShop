@@ -31,7 +31,7 @@ const NavIcons = () => {
     }
   };
 
-  // přihlášení před wix clienta
+  // přihlášení přes wix clienta
 
   // const wixClient = useWixClient();
 
