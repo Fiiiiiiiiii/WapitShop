@@ -18,8 +18,8 @@ const Checkout = () => {
     const [telefon, setTelefon] = useState("");
     const [email, setEmail] = useState("");
         const [carriers, setCarriers] = useState("PPL");
-        const [zasilkovna_ID, setZasilkovna_ID] = useState(123456);
-        const [postCode, setPostCode] = useState(11000);
+        const [zasilkovna_ID, setZasilkovna_ID] = useState("123456");
+        const [postCode, setPostCode] = useState("11000");
     const [stat, setStat] = useState("");
     const [ulice, setUlice] = useState("");
     const [mesto, setMesto] = useState("");
@@ -38,12 +38,21 @@ const Checkout = () => {
 
     const handleSubmit = async () => {
 
-        const cartItems = cart.lineItems?.map(item => ({
-            "productName": (item.productName?.original)?.toString(),
-            "quantity": item.quantity,
-            "tax": 21,
-            "price": Number(item.price?.amount!) * item.quantity!
-        }));
+        //----------Pro cartItems---------
+        type CartItem = {
+            productName: string;
+            quantity: number;
+            tax: number;
+            price: number; // Typ `number` pro decimal
+          };
+
+        const cartItems: CartItem[] = cart.lineItems?.map((item): CartItem => ({
+            productName: item.productName?.original?.toString() || '',
+            quantity: Number(item.quantity) || 0,
+            tax: 21,
+            price: parseFloat((Number(item.price?.amount!) * item.quantity!).toFixed(2)),
+        })) || [];
+        // ------------------------------
 
         console.log(cart)
 
@@ -64,30 +73,14 @@ const Checkout = () => {
             "payId": payId,
             "payStatus": payStatus,
             "status": status,
-            "cartItems": cartItems
+            "cartItems": cartItems,
+
+            "cenaDopravy": cenaDopravy
         };
 
         console.log(data);
 
-        //test
-        try {
-            const res = await fetch('https://api.wapit.cz/api/Shop/createOrder', {
-              method:"PUT",
-              headers:{"Content-Type": "application/json"},
-              body: JSON.stringify(data),
-            })
-
-
-            if (!res.ok) {
-                throw new Error('Chyba při odesílání dat / Chyba při vytváření objednávky');
-            }
-
-            const responseData = await res.json();
-            console.log('Objednávka úspěšně vytvořena:', responseData);
-
-        } catch (err) {
-            console.error(err)
-        }
+        localStorage.setItem('checkoutData', JSON.stringify(data));
     }
 
   return (
@@ -210,6 +203,23 @@ const Checkout = () => {
                     </div>
                 </form>
 
+                {/* Form 3 */}
+                <form className='flex flex-col gap-4 px-6 p-6 mt-8 bg-gray-100 rounded-xl'>
+                    <h1 className='font-semibold text-xl'>Způsob Platby</h1>
+                    <div className='flex justify-between items-center'>
+                        <label>
+                        <input
+                            type="radio"
+                            value="CSOB"
+                        />
+                        Platba kartou
+                        </label>
+                        {/* <h3 className='flex justify-between gap-2'>
+                            <Image src="/mastercard.png" alt="mastercard" width={60} height={30} className="w-16 h-8"/>
+                            <Image src="/visa.png" alt="visa" width={60} height={30} className="w-16 h-8"/>
+                        </h3> */}
+                    </div>
+                </form>
             </div>
 
         </div>
@@ -230,11 +240,10 @@ const Checkout = () => {
                     <div>{(Number((cart as any).subtotal?.amount) || 0) + Number(cenaDopravy)} Kč</div>
                     </div>
                 <div className="flex justify-center mb-6">
-                    <Link href="/pokladna" className='w-full'>
+                    <Link href="/pokladna/kontrola" className='w-full' onClick={() => handleSubmit()}>
                         <button
                         className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75 w-full"
                         disabled={isLoading}
-                        onClick={() => handleSubmit()}
                         >
                             Potvrdit
                         </button>
