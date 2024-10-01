@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import CartModel from "./CartModel";
 import { useWixClient } from "@/hooks/useWixClient";
 import Cookies from "js-cookie";
@@ -19,10 +19,7 @@ const NavIcons = () => {
 
   const wixClient = useWixClient();
   const isLoggedIn = wixClient.auth.loggedIn();
-
-  // TEMPORARY
-  // const isLoggedIn = false;
-
+  
   const handleProfile = () => {
     if (!isLoggedIn) {
       router.push("/login");
@@ -30,23 +27,24 @@ const NavIcons = () => {
       setIsProfileOpen((prev) => !prev);
     }
   };
-
+  
+  
   // přihlášení přes wix clienta
-
+  
   // const wixClient = useWixClient();
-
+  
   // const login = async () => {
-  //   const loginRequestData = wixClient.auth.generateOAuthData(
-  //     "http://localhost:3000"
-  //   );
-
+    //   const loginRequestData = wixClient.auth.generateOAuthData(
+      //     "http://localhost:3000"
+      //   );
+      
   //   console.log(loginRequestData);
 
   //   localStorage.setItem("OAuthRedirectData", JSON.stringify(loginRequestData));
   //   const { authUrl } = await wixClient.auth.getAuthUrl(loginRequestData);
   //   window.location.href = authUrl;
   // };
-
+  
   const handleLogout = async () => {
     setIsLoading(true);
     Cookies.remove("refreshToken");
@@ -55,13 +53,28 @@ const NavIcons = () => {
     setIsProfileOpen(false);
     router.push(logoutUrl);
   };
-
+  
+  // timer pro zavření košíku
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current); // Pokud už je nastaven timeout, zrušíme ho
+    }
+    setIsCartOpen(true); // Otevře se košík
+  };
+  const handleMouseLeave = () => {
+    // Nastavíme timeout, který zavře košík po 500ms
+    timeoutRef.current = setTimeout(() => {
+      setIsCartOpen(false);
+    }, 500);
+  };
+  
   const { cart, counter, getCart } = useCartStore();
-
+  
   useEffect(() => {
     getCart(wixClient);
   }, [wixClient, getCart]);
-
+  
   return (
     <div className="flex items-center gap-4 xl:gap-6 relative">
       <Image
@@ -89,8 +102,9 @@ const NavIcons = () => {
         className="cursor-pointer"
       />
       <div
-        className="relative cursor-pointer"
-        onClick={() => setIsCartOpen((prev) => !prev)}
+        className="relative"
+        onMouseEnter={handleMouseEnter} // Pokud na košík najede, neuzavře se
+        onMouseLeave={handleMouseLeave} // Pokud ho opustí, spustí se timeout
       >
         <Image
           src="/cart.png"
@@ -102,8 +116,8 @@ const NavIcons = () => {
         {counter === 0 ? "" : <div className="absolute -top-4 -right-4 w-6 h-6 bg-wapit rounded-full text-white text-sm flex items-center justify-center">
           {counter}
         </div>}
+        {isCartOpen && <CartModel setIsCartOpen={setIsCartOpen}/>}
       </div>
-      {isCartOpen && <CartModel />}
     </div>
   );
 };

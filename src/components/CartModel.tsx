@@ -4,18 +4,23 @@ import Image from "next/image";
 import { useCartStore } from "@/hooks/useCartStore";
 import { media as wixMedia } from "@wix/sdk";
 import { useWixClient } from "@/hooks/useWixClient";
+import Link from "next/link";
 
-const CartModel = () => {
+const CartModel = ({ setIsCartOpen }: { setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
   // TEMPORARY
   // const cartItem = true;
 
   const wixClient = useWixClient();
   const { cart, isLoading, removeItem } = useCartStore();
 
-  console.log(cart);
+  const handleClose = () => {
+    setIsCartOpen(false);
+  };
+
+  // console.log(cart);
 
   return (
-    <div className="w-[380px] absolute p-5 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20">
+    <div className="w-[380px] absolute p-5 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20" onMouseLeave={handleClose}>
       {!cart.lineItems ? (
         <div className="">Košík je prázdný</div>
       ) : (
@@ -88,18 +93,15 @@ const CartModel = () => {
               <span className="">Celkem</span>
               <span className="">{(cart as any).subtotal?.amount || 0},-</span>
             </div>
-            <p className="text-gray-500 text-sm mt-2 mb-4">
+            <p className="text-gray-500 text-sm mt-2 mb-6">
               Doprava a platba bude u pokladny
             </p>
-            <div className="flex justify-between text-sm">
-              <button className="rounded-md py-3 px-4 ring-1 ring-gray-300">
-                Košík
-              </button>
+            <div className="flex justify-center text-sm">
               <button
-                className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75"
+                className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75 w-11/12"
                 disabled={isLoading}
               >
-                Pokladna
+                <Link href="/kosik" onClick={handleClose}>Přejít do nákupního košíku</Link>
               </button>
             </div>
           </div>

@@ -27,11 +27,12 @@ const SinglePage = async ({ params }: { params: { slug: string } }) => {
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-16">
       {/* IMG */}
       <div className="w-full lg:w-1/2 lg:sticky top-20 h-max">
+        <h1 className="lg:hidden text-4xl font-medium">{product.name}</h1>
         <ProductImages items={product.media?.items} />
       </div>
       {/* TEXT */}
       <div className="w-full lg:w-1/2 flex flex-col gap-6">
-        <h1 className="text-4xl font-medium">{product.name}</h1>
+        <h1 className="hidden lg:flex text-4xl font-medium">{product.name}</h1>
         <p
           className="text-gray-500"
           dangerouslySetInnerHTML={{
@@ -66,17 +67,19 @@ const SinglePage = async ({ params }: { params: { slug: string } }) => {
           />
         )}
         <div className="h-[2px] bg-gray-100" />
-        {product.additionalInfoSections?.map((section: any) => (
-          <div className="text-sm" key={section.title}>
-            <h4 className="font-bold text-lg mb-4">{section.title}</h4>
-            <p
-              className="leading-7"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(section.description),
-              }}
-            ></p>
-          </div>
-        ))}
+        {product.additionalInfoSections
+          ?.filter((section: any) => section.title !== "shortDesc")
+          .map((section: any) => (
+            <div className="text-sm" key={section.title}>
+              <h4 className="font-bold text-lg mb-4">{section.title}</h4>
+              <p
+                className="leading-7"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(section.description),
+                }}
+              ></p>
+            </div>
+          ))}
       </div>
     </div>
   );
