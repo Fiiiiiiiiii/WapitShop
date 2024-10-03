@@ -1,9 +1,9 @@
-import Check from '@/components/Check'
+import Confirm from '@/components/Confirm'
 import React from 'react'
 
 const Kontrola = () => {
   return (
-    <Check/>
+    <Confirm/>
   )
 }
 
