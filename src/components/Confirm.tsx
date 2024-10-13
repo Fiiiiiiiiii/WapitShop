@@ -57,6 +57,19 @@ const Confirm = () => {
   // process - zpracování platby - zpracuje platbu - vrátí taky paidId a podpis
   // pak složím url z payId, dttm a podpisu a přesměruji na platební bránu
 
+  // Nový přístup - 4 části
+  // getOrderNumber
+  // init
+  // createOrder
+  // process
+
+  // další přístup
+  // createOrder - vrátí orderNO
+  // getPayId - ??
+  // init - sem hodím orderNO
+  // process
+
+
   const handlePaymentInit = async () => {
 
     const payData = {
