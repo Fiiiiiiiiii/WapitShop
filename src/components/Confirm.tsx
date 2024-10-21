@@ -68,17 +68,58 @@ const Confirm = () => {
   // getPayId - ??
   // init - sem hodím orderNO
   // process
+  
+  const handleCreateOrder = async () => {
+    
+    //test
+    try {
+          const res = await fetch('https://api.wapit.cz/api/Shop/createOrder', {
+              method:"PUT",
+              headers:{"Content-Type": "application/json"},
+              body: JSON.stringify({
+                "name": data?.name,
+                "lastName": data?.lastName,
+                "phone": data?.phone,
+                "email": data?.email,
+                "carrier": data?.carrier,
+                "zasilkovna_ID": data?.zasilkovna_ID,
+                "postCode": data?.postCode,
+                "deliveryAddress": data?.deliveryAddress,
+                "invoiceAddress": data?.invoiceAddress,
+                "payType": data?.payType,
+                "payStatus": data?.payStatus,
+                "status": data?.status,
+                "cartItems": data?.cartItems,
+              }),
+            })
+        
+            if (!res.ok) {
+                  throw new Error('Chyba při odesílání dat / Chyba při vytváření objednávky');
+            }
+        
+            const responseData = await res.json();
+            console.log(responseData);
 
+            handlePaymentInit(responseData.toString());
+          
+        } catch (err) {
+            console.error(err)
+        }
+        console.log(data)
+          
+    }
 
-  const handlePaymentInit = async () => {
+  const handlePaymentInit = async (Id: string) => {
+
+    console.log(Id);
 
     const payData = {
       "merchantId": "A5191cWVB1",
-      "orderNo": "30",
-      "dttm": "null",
+      "orderNo": Id,
+      "dttm": "202410171438",
       "totalAmount": ((Number((cart as any).subtotal?.amount) || 0) + Number(data?.cenaDopravy || 0)) * 100,
       "currency": "CZK",
-      "returnUrl": "https://wapitshop.vercel.app/",
+      "returnUrl": "https://wapit.cz/",
       "itemName": "Košík",
       "language": "cs",
       "signature": "null",
@@ -97,8 +138,10 @@ const Confirm = () => {
       }
 
       const data = await res.json();
+      console.log("success");
+      console.log(data);
       
-      handleCreateOrder(data.payId, data.dttm);
+      handleAddPayId(Id);
 
     } catch (err) {
         console.error(err)
@@ -106,55 +149,42 @@ const Confirm = () => {
 
   }
 
-  const handleCreateOrder = async (payId: string, dttm: string) => {
-    
-    //test
-    try {
-          const res = await fetch('https://api.wapit.cz/api/Shop/createOrder', {
-              method:"PUT",
-              headers:{"Content-Type": "application/json"},
-              body: JSON.stringify({
-                "name": data?.name,
-                "lastName": data?.lastName,
-                "phone": data?.phone,
-                "email": data?.email,
-                "carrier": data?.carrier,
-                "zasilkovna_ID": data?.zasilkovna_ID,
-                "postCode": data?.postCode,
-                "deliveryAddress": data?.deliveryAddress,
-                "invoiceAddress": data?.invoiceAddress,
-                "payType": data?.payType,
-                "payId": payId,
-                "payStatus": data?.payStatus,
-                "status": data?.status,
-                "cartItems": data?.cartItems,
-              }),
-            })
-        
-            if (!res.ok) {
-                  throw new Error('Chyba při odesílání dat / Chyba při vytváření objednávky');
-            }
-        
-            const responseData = await res.json();
-            console.log('Objednávka úspěšně vytvořena:', responseData);
+  const handleAddPayId = async (Id: string) => {
 
-            handlePaymentProcess(payId, dttm);
-          
-        } catch (err) {
-            console.error(err)
-        }
-        console.log(data)
-          
+    try {
+      const res = await fetch('https://api.wapit.cz/api/Shop/addPayId', {
+        method: "POST",
+        headers:{"Content-Type": "application/json"},
+        body: JSON.stringify({
+          "id": Number(Id), //?? akceptuje int i string ???
+          "payId": data?.payId,
+        }),
+      })
+
+      if (!res.ok) {
+          throw new Error('Chyba při odesílání dat');
+      }
+
+      console.log("success2");
+
+      //handlePaymentProcess();
+      
+    } catch (err) {
+      console.error(err)
     }
+
+  }
     
-    const handlePaymentProcess = async (payId: string, dttm: string) => {
+
+    
+    const handlePaymentProcess = async () => {
         try {
           const res = await fetch('https://api.wapit.cz/api/Payment/process', {
               method:"POST",
               headers:{"Content-Type": "application/json"},
               body: JSON.stringify({
-                  "dttm": dttm,
-                  "payId": payId,
+                  "dttm": "202410171438",
+                  "payId": data?.payId,
               }),
           })
 
@@ -162,9 +192,9 @@ const Confirm = () => {
               throw new Error('Chyba při odesílání dat');
           }
 
-          const data = await res.json();
+          const responseData = await res.json();
 
-          const url = `https://iapi.iplatebnibrana.csob.cz/api/v1.9/payment/process/A5191cWVB1/${data.payId}/${dttm}/${data.signature}`
+          const url = `https://iapi.iplatebnibrana.csob.cz/api/v1.9/payment/process/A5191cWVB1/${responseData.payId}/${"202410171438"}/${responseData.signature}`
           window.location.href = url;
 
         } catch (err) {
@@ -226,7 +256,7 @@ const Confirm = () => {
                         className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75 w-full"
                         disabled={isLoading}
                         //onClick={() => handleCreateOrder()}
-                        onClick={() => handlePaymentInit()}
+                        onClick={() => handleCreateOrder()}
                         >
                             Potvrdit
                         </button>
