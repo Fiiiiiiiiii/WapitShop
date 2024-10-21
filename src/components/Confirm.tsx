@@ -98,7 +98,7 @@ const Confirm = () => {
             }
         
             const responseData = await res.json();
-            console.log(responseData);
+            //console.log(responseData);
 
             handlePaymentInit(responseData.toString());
           
@@ -116,7 +116,6 @@ const Confirm = () => {
     const payData = {
       "merchantId": "A5191cWVB1",
       "orderNo": Id,
-      "dttm": "202410171438",
       "totalAmount": ((Number((cart as any).subtotal?.amount) || 0) + Number(data?.cenaDopravy || 0)) * 100,
       "currency": "CZK",
       "returnUrl": "https://wapit.cz/",
@@ -124,7 +123,7 @@ const Confirm = () => {
       "language": "cs",
       "signature": "null",
     }
-    console.log(payData)
+    //console.log(payData)
 
     try {
       const res = await fetch('https://api.wapit.cz/api/Payment/init', {
@@ -138,10 +137,10 @@ const Confirm = () => {
       }
 
       const data = await res.json();
-      console.log("success");
-      console.log(data);
+      //console.log("success");
+      //console.log(data.payId);
       
-      handleAddPayId(Id);
+      handleAddPayId(Id, data.payId, data.dttm);
 
     } catch (err) {
         console.error(err)
@@ -149,15 +148,15 @@ const Confirm = () => {
 
   }
 
-  const handleAddPayId = async (Id: string) => {
+  const handleAddPayId = async (Id: string, payId: string, dttm: number) => {
 
     try {
       const res = await fetch('https://api.wapit.cz/api/Shop/addPayId', {
         method: "POST",
         headers:{"Content-Type": "application/json"},
         body: JSON.stringify({
-          "id": Number(Id), //?? akceptuje int i string ???
-          "payId": data?.payId,
+          "id": Number(Id), 
+          "payId": payId,
         }),
       })
 
@@ -165,9 +164,9 @@ const Confirm = () => {
           throw new Error('Chyba při odesílání dat');
       }
 
-      console.log("success2");
+      //console.log("success2");
 
-      //handlePaymentProcess();
+      handlePaymentProcess(payId, dttm);
       
     } catch (err) {
       console.error(err)
@@ -175,16 +174,14 @@ const Confirm = () => {
 
   }
     
-
-    
-    const handlePaymentProcess = async () => {
+    const handlePaymentProcess = async (payId: string, dttm: number) => {
         try {
           const res = await fetch('https://api.wapit.cz/api/Payment/process', {
               method:"POST",
               headers:{"Content-Type": "application/json"},
               body: JSON.stringify({
-                  "dttm": "202410171438",
-                  "payId": data?.payId,
+                  "dttm": dttm,
+                  "payId": payId,
               }),
           })
 
@@ -194,7 +191,7 @@ const Confirm = () => {
 
           const responseData = await res.json();
 
-          const url = `https://iapi.iplatebnibrana.csob.cz/api/v1.9/payment/process/A5191cWVB1/${responseData.payId}/${"202410171438"}/${responseData.signature}`
+          const url = `https://iapi.iplatebnibrana.csob.cz/api/v1.9/payment/process/A5191cWVB1/${payId}/${dttm}/${responseData.signature}`
           window.location.href = url;
 
         } catch (err) {
