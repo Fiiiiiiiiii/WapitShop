@@ -118,7 +118,7 @@ const Confirm = () => {
       "orderNo": Id,
       "totalAmount": ((Number((cart as any).subtotal?.amount) || 0) + Number(data?.cenaDopravy || 0)) * 100,
       "currency": "CZK",
-      "returnUrl": `https://wapitshop.vercel.app/pokladna/${Id}`,
+      "returnUrl": `https://wapit.cz/pokladna/${Id}`,
       "itemName": "Košík",
       "language": "cs",
       "signature": "null",
