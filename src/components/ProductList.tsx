@@ -5,7 +5,7 @@ import { products } from "@wix/stores";
 import DOMPurify from "isomorphic-dompurify";
 import Pagination from "./Pagination";
 
-const PRODUCT_PER_PAGE = 8;
+const PRODUCT_PER_PAGE = 24;
 
 const ProductList = async ({
   categoryId,
@@ -80,16 +80,22 @@ const ProductList = async ({
             <span className="font-semibold">{product.priceData?.price},-</span>
           </div>
           {product.additionalInfoSections && (
-            <div
-              className="text-sm text-gray-500"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(
-                  product.additionalInfoSections.find(
-                    (section: any) => section.title === "shortDesc"
-                  )?.description || ""
-                ),
-              }}
-            ></div>
+            // <div
+            //   className="text-sm text-gray-500"
+            //   dangerouslySetInnerHTML={{
+            //     __html: DOMPurify.sanitize(
+            //       product.additionalInfoSections.find(
+            //         (section: any) => section.title === "shortDesc"
+            //       )?.description || ""
+            //     ),
+            //   }}
+            // ></div>
+            <p
+            className="text-gray-500"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(product.description || ""),
+            }}
+          ></p>
           )}
           <button className="rounded-2xl ring-1 ring-wapit text-wapit w-max py-2 px-4 text-xs hover:bg-wapit hover:text-white">
             Více
