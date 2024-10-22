@@ -54,7 +54,7 @@ const Checkout = () => {
         })) || [];
         // ------------------------------
 
-        console.log(cart)
+        //console.log(cart)
 
         const deliveryAddress = `${ulice}, ${mesto}, ${psc}, ${stat}`;
         const invoiceAddress = `${ulice}, ${mesto}, ${psc}, ${stat}`;
@@ -78,7 +78,7 @@ const Checkout = () => {
             "cenaDopravy": cenaDopravy
         };
 
-        console.log(data);
+        //console.log(data);
 
         localStorage.setItem('checkoutData', JSON.stringify(data));
     }

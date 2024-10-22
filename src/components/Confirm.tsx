@@ -105,13 +105,13 @@ const Confirm = () => {
         } catch (err) {
             console.error(err)
         }
-        console.log(data)
+        //console.log(data)
           
     }
 
   const handlePaymentInit = async (Id: string) => {
 
-    console.log(Id);
+    //console.log(Id);
 
     const payData = {
       "merchantId": "A5191cWVB1",

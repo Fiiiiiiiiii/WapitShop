@@ -2,11 +2,12 @@
 
 import ReturnUrl from '@/components/ReturnUrl'
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const ReturnUrlSlug = () => {
 
     const pathname = usePathname();
+    const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
         handlePaymentStatus();
@@ -31,19 +32,27 @@ const ReturnUrlSlug = () => {
               throw new Error('Chyba při odesílání dat');
           }
     
-        console.log("success3");
+        console.log("success: odpověd serveru je 200");
+        setIsSuccess(true); 
           
         } catch (err) {
           console.error(err)
+          setIsSuccess(false);
         }
     
     }
 
   return (
-    <div className='h-[calc(100vh-80px)] flex flex-col justify-center items-center gap-16'>
-      <div className='text-2xl font-bold'>
-        Děkujeme za objednávku. Fakturu jsme Vám odeslali na email.
-      </div>
+    <div className="h-[calc(100vh-80px)] flex flex-col justify-center items-center gap-16">
+      {isSuccess ? ( 
+        <div className="text-2xl font-bold">
+          Děkujeme za objednávku. Fakturu jsme Vám odeslali na email.
+        </div>
+      ) : (
+        <div className="text-2xl font-bold">
+          Čekáme na potvrzení platby...
+        </div>
+      )}
     </div>
   )
 }
