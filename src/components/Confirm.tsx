@@ -118,7 +118,7 @@ const Confirm = () => {
       "orderNo": Id,
       "totalAmount": ((Number((cart as any).subtotal?.amount) || 0) + Number(data?.cenaDopravy || 0)) * 100,
       "currency": "CZK",
-      "returnUrl": `https://wapit.cz/pokladna/${Id}`,
+      "returnUrl": `https://wapitshop.vercel.app/pokladna/${Id}`,
       "itemName": "Košík",
       "language": "cs",
       "signature": "null",
@@ -176,7 +176,7 @@ const Confirm = () => {
     
     const handlePaymentProcess = async (payId: string, dttm: number) => {
         try {
-          const res = await fetch('https://api.wapitshop.vercel.app/api/Payment/process', {
+          const res = await fetch('https://api.wapit.cz/api/Payment/process', {
               method:"POST",
               headers:{"Content-Type": "application/json"},
               body: JSON.stringify({
