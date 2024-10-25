@@ -17,7 +17,7 @@ const wixClient = createClient({
   auth: OAuthStrategy({
     clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
     tokens: {
-      refreshToken,
+      refreshToken: refreshToken || undefined,
       accessToken: { value: "", expiresAt: 0 },
     },
   }),
