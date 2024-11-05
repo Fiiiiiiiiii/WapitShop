@@ -14,6 +14,7 @@ type CartState = {
     quantity: number
   ) => void;
   removeItem: (wixClient: WixClient, itemId: string) => void;
+  removeAllItem: (wixClient: WixClient) => void;
 };
 
 export const useCartStore = create<CartState>((set) => ({
@@ -84,6 +85,20 @@ export const useCartStore = create<CartState>((set) => ({
       });
     } catch (error) {
       console.error("Chyba při odstraňování položky z košíku:", error);
+      set({ isLoading: false });
+    }
+  },
+  removeAllItem: async (wixClient) => {
+    set((state) => ({ ...state, isLoading: true }));
+    try {
+      await wixClient.currentCart.deleteCurrentCart();
+      set({
+        cart: undefined,
+        counter: 0,
+        isLoading: false,
+      });
+    } catch (error) {
+      console.error("Chyba při odstraňování všech položek z košíku:", error);
       set({ isLoading: false });
     }
   },

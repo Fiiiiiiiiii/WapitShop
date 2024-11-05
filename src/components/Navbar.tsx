@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 import Menu from "./Menu";
 import Image from "next/image";
@@ -35,7 +37,7 @@ const Navbar = () => {
             <Link href="/list">Obchod</Link>
             <Link href="/">Blog</Link>
             <Link href="/">O nás</Link>
-            <Link href="/">Kontact</Link>
+            <Link href="/">Kontakt</Link>
           </div>
         </div>
         {/* RIGHT */}

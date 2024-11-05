@@ -11,7 +11,7 @@ const CartModel = ({ setIsCartOpen }: { setIsCartOpen: React.Dispatch<React.SetS
   // const cartItem = true;
 
   const wixClient = useWixClient();
-  const { cart, isLoading, removeItem } = useCartStore();
+  const { cart, isLoading, removeItem, removeAllItem } = useCartStore();
 
   const handleClose = () => {
     setIsCartOpen(false);
@@ -21,7 +21,7 @@ const CartModel = ({ setIsCartOpen }: { setIsCartOpen: React.Dispatch<React.SetS
 
   return (
     <div className="w-[380px] absolute p-5 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20" onMouseLeave={handleClose}>
-      {!cart.lineItems ? (
+      {!cart || !cart.lineItems ? (
         <div className="">Košík je prázdný</div>
       ) : (
         <>

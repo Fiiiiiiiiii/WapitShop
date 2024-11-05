@@ -5,19 +5,27 @@ import Image from "next/image";
 import { useState } from 'react'
 import { useCartStore } from "@/hooks/useCartStore";
 import { useWixClient } from "@/hooks/useWixClient";
+// import PacketaComponent from './Packeta';
+
+declare global {
+  interface Window {
+    Packeta: any;
+  }
+}
 
 const Checkout = () => {
+    
     const wixClient = useWixClient();
     const { cart, isLoading, removeItem, addItem } = useCartStore();
 
-    const [form2SelectedOption, setForm2SelectedOption] = useState('');
     const [cenaDopravy, setCenaDopravy] = useState(0);
+    const [packetaWidget, setPacketaWidget] = useState(false);
 
     const [jmeno, setJmeno] = useState("");
     const [prijmeni, setPrijmeni] = useState("");
     const [telefon, setTelefon] = useState("");
     const [email, setEmail] = useState("");
-        const [carriers, setCarriers] = useState("PPL");
+        const [carriers, setCarriers] = useState("");
         const [zasilkovna_ID, setZasilkovna_ID] = useState("123456");
         const [postCode, setPostCode] = useState("11000");
     const [stat, setStat] = useState("");
@@ -26,15 +34,19 @@ const Checkout = () => {
     const [psc, setPsc] = useState("");
         // const [deliveryAddress, setDeliveryAddress] = useState("");
         // const [invoiceAddress, setInvoiceAddress] = useState("");
-        const [payType, setPayType] = useState("Credit_card");
+        const [payType, setPayType] = useState("");
         const [payId, setPayId] = useState("PAY123456");
         const [payStatus, setPayStatus] = useState("Paid");
         const [status, setStatus] = useState("Pending");
 
     const handleForm2Change = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setForm2SelectedOption(event.target.value);
-        console.log(event.target.value);
+        setCarriers(event.target.value);
+        //console.log(event.target.value);
     };
+    const handleForm3Change = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPayType(event.target.value);
+        //console.log(event.target.value);
+    }
 
     const handleSubmit = async () => {
 
@@ -82,6 +94,46 @@ const Checkout = () => {
 
         localStorage.setItem('checkoutData', JSON.stringify(data));
     }
+
+    //--------- Zásilkovna --------------
+
+    const apiKey = "TVŮJ_API_KEY";
+
+    const handlePointSelected = (point: any) => {
+      console.log("Vybraný bod:", point);
+    };
+
+    const handleOpenWidget = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+
+      // Dynamické načtení knihovny a spuštění widgetu
+      const script = document.createElement('script');
+      script.src = '/lib/packeta.js';
+      script.async = true;
+  
+      script.onload = () => {        
+        if (window.Packeta && window.Packeta.Widget) {
+          
+          const callback = (point: any) => {
+            console.log("Vybraný bod:", point);
+            handlePointSelected(point); // Spustění callback po výběru bodu
+            window.Packeta.Widget.close(); // Zavření widget po výběru bodu
+          };
+          
+          window.Packeta.Widget.pick(apiKey, callback, { version: 3 });
+        } else {
+          console.error("Packeta knihovna nebyla správně inicializována.");
+        }
+      };
+  
+      script.onerror = () => {
+        console.error("Chyba při načítání skriptu packeta.js.");
+      };
+  
+      document.body.appendChild(script);
+    };
+
+    //--------------------------------------------
 
   return (
     <div className="flex flex-col justify-between flex-wrap lg:flex-row mt-16 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-48">
@@ -172,47 +224,74 @@ const Checkout = () => {
                 <form className='flex flex-col gap-4 px-6 p-6 mt-8 bg-gray-100 rounded-xl'>
                     <h1 className='font-semibold text-xl'>Způsob dopravy</h1>
                     <div className='flex justify-between'>
-                        <label>
-                        <input
-                            type="radio"
-                            value="Zasilkovna"
-                            checked={form2SelectedOption === 'Zasilkovna'}
-                            onChange={(e) => {
-                                handleForm2Change(e);
-                                setCenaDopravy(69);
-                            }}
-                        />
-                        Zásilkovna
+                        <label className='flex gap-2'>
+                            <input
+                                type="radio"
+                                value="Zasilkovna_vydejni_misto"
+                                checked={carriers === 'Zasilkovna_vydejni_misto'}
+                                onChange={(e) => {
+                                    handleForm2Change(e);
+                                    setCenaDopravy(69);
+                                    setPacketaWidget(true);
+                                }}
+                            />
+                            Zásilkovna - Výdejní místo
                         </label>
                         <h3>69 Kč</h3>
                     </div>
                     <div className='flex justify-between'>
-                        <label>
-                        <input
-                            type="radio"
-                            value="PPL"
-                            checked={form2SelectedOption === 'PPL'}
-                            onChange={(e) => {
-                                handleForm2Change(e);
-                                setCenaDopravy(79);
-                            }}
-                        />
-                        PPL
+                        <label className='flex gap-2'>
+                            <input
+                                type="radio"
+                                value="Zasilkovna_balik_do_ruky"
+                                checked={carriers === 'Zasilkovna_balik_do_ruky'}
+                                onChange={(e) => {
+                                    handleForm2Change(e);
+                                    setCenaDopravy(69);
+                                    setPacketaWidget(false);
+                                }}
+                            />
+                            Zásilkovna - Balík do ruky
                         </label>
-                        <h3>79 Kč</h3>
+                        <h3>69 Kč</h3>
                     </div>
+                    {packetaWidget && (
+                        <button 
+                            onClick={handleOpenWidget}
+                            className='bg-black text-white rounded-md py-3 px-4'
+                        >
+                            Vybrat výdejní místo
+                        </button>
+                    )}
                 </form>
 
                 {/* Form 3 */}
                 <form className='flex flex-col gap-4 px-6 p-6 mt-8 bg-gray-100 rounded-xl'>
                     <h1 className='font-semibold text-xl'>Způsob Platby</h1>
-                    <div className='flex justify-between items-center'>
-                        <label>
-                        <input
-                            type="radio"
-                            value="CSOB"
-                        />
-                        Platba kartou
+                    <div className='flex flex-col justify-center gap-4'>
+                        <label className='flex gap-2'>
+                            <input
+                                type="radio"
+                                value="Platba_kartou"
+                                checked={payType === 'Platba_kartou'}
+                                onChange={(e) => {
+                                        handleForm3Change(e);
+                                    }
+                                }
+                            />
+                            Platba kartou
+                        </label>
+                        <label className='flex gap-2'>
+                            <input 
+                                type="radio"
+                                value="Platba_bankovnim_prevodem"
+                                checked={payType === 'Platba_bankovnim_prevodem'}
+                                onChange={(e) => {
+                                        handleForm3Change(e);
+                                    }
+                                }
+                            />
+                            Platba bankovním převodem
                         </label>
                         {/* <h3 className='flex justify-between gap-2'>
                             <Image src="/mastercard.png" alt="mastercard" width={60} height={30} className="w-16 h-8"/>

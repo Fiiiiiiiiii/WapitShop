@@ -10,6 +10,8 @@ const Confirm = () => {
   const wixClient = useWixClient();
   const { cart, isLoading, removeItem, addItem } = useCartStore();
 
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
+
   //-----------------------------extrahování dat--------------------------------
 
   type CartItem = {
@@ -70,6 +72,8 @@ const Confirm = () => {
   // process
   
   const handleCreateOrder = async () => {
+
+    setSpinnerLoader(true);
     
     //test
     try {
@@ -250,12 +254,14 @@ const Confirm = () => {
                     </div>
                 <div className="flex justify-center mb-6">
                         <button
-                        className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75 w-full"
+                        className="rounded-md flex justify-center items-center h-11 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75 w-full"
                         disabled={isLoading}
                         //onClick={() => handleCreateOrder()}
                         onClick={() => handleCreateOrder()}
                         >
-                            Potvrdit
+                            {spinnerLoader ? (
+                              <Image src="/spinner.svg" alt="spinner" width={20} height={20} className="w-8 h-8"/>
+                            ) : "Potvrdit"}
                         </button>
                 </div>
                 <div className="text-sm mb-4">Přijímáme</div>

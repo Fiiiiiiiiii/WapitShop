@@ -56,7 +56,7 @@ const Footer = () => {
               <Link href="">O nás</Link>
               <Link href="">Firma</Link>
               <Link href="">Blog</Link>
-              <Link href="">Kontact</Link>
+              <Link href="">Kontakt</Link>
             </div>
           </div>
           <div className="flex flex-col gap-16 w-1/3">
