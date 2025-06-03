@@ -27,8 +27,8 @@ const Filter = () => {
           onChange={handleFilterChange}
         >
           <option>Typ</option>
-          <option value="physical">Fyzický</option>
-          <option value="digital">Digitalní</option>
+          <option value="physical">Bez nikotinových</option>
+          <option value="digital">S nikotinem</option>
         </select>
         <input
           type="text"

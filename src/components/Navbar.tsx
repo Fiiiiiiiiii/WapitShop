@@ -32,10 +32,10 @@ const Navbar = () => {
             <FaCartShopping className="text-2xl text-wapit" />
             <div className="text-2xl tracking-wide">Wapit</div>
           </Link>
-          <div className="hidden xl:flex gap-4">
+          <div className="hidden xl:flex gap-8">
             <Link href="/">Domů</Link>
             <Link href="/list">Obchod</Link>
-            <Link href="/">Blog</Link>
+            {/* <Link href="/">Blog</Link> */}
             <Link href="/">O nás</Link>
             <Link href="/">Kontakt</Link>
           </div>

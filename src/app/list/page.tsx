@@ -14,10 +14,10 @@ const ListPage = async ({ searchParams }: { searchParams: any }) => {
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative">
       {/* CAMPAIGN */}
-      <div className="hidden bg-cyan-50 px-4 sm:flex justify-between h-64">
+      <div className="hidden bg-gradient-to-r from-slate-100 to-slate-300 px-4 sm:flex justify-between h-64">
         <div className="w-2/5 flex flex-col items-center justify-center gap-8">
-          <h1 className="text-3xl pl-6 font-bold leading-[48px] text-gray-700">
-            Vytvoř si vlastní síť. <br />Vybuduj ji podle svých představ!
+          <h1 className="text-2xl pl-6 font-bold leading-[48px] text-gray-700">
+            Objev svět nikotinových sáčků <br /> diskrétně, elegantně, kdykoliv.
           </h1>
           {/* <button className="rounded-3xl bg-wapit text-white w-max py-3 px-5 text-sm">
             Nakoupit
@@ -25,7 +25,7 @@ const ListPage = async ({ searchParams }: { searchParams: any }) => {
         </div>
         <div className="relative w-3/5">
           <Image
-            src="/listMain.png"
+            src="/listMain2.png"
             alt="listImage"
             fill
             className="object-contain"

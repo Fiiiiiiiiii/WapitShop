@@ -64,7 +64,7 @@ const ProductList = async ({
                 alt="test"
                 fill
                 sizes="25vw"
-                className="absolute object-contain rounded-md z-10 hover:opacity-0 transition-opacity easy duration-500"
+                className="absolute object-contain rounded-md z-10 hover:opacity-0 transition-opacity easy duration-500 bg-white"
               />
               {product.media?.items && (
                 <Image

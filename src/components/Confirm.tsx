@@ -251,7 +251,7 @@ const Confirm = () => {
                 <div className="flex justify-between mb-6">
                     <h3 className="">Celkem</h3>
                     <div>{(Number((cart as any).subtotal?.amount) || 0) + Number(data?.cenaDopravy || 0)} Kč</div>
-                    </div>
+                </div>
                 <div className="flex justify-center mb-6">
                         <button
                         className="rounded-md flex justify-center items-center h-11 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75 w-full"

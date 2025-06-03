@@ -21,7 +21,7 @@ const CategoryList = async () => {
                 src={item.media?.mainMedia?.image?.url || "/category.png"}
                 alt=""
                 fill
-                sizes="20vw"
+                sizes="25vw"
                 className="object-cover"
               />
             </div>

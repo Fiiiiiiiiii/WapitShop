@@ -9,23 +9,23 @@ const slides = [
     id: 1,
     title: "Bezkonkurenční cena!",
     description: "Nový e-shop na trhu",
-    img: "https://images.pexels.com/photos/5073493/pexels-photo-5073493.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    img: "https://images.unsplash.com/photo-1682777119396-382cff6b174b?q=80&w=2036&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     url: "/list",
     bg: "bg-gradient-to-r from-pink-100 to-cyan-100",
   },
   {
     id: 2,
-    title: "Nejnovější technologie",
-    description: "Pro váš IT svět",
-    img: "https://images.unsplash.com/photo-1516044734145-07ca8eef8731?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Moderní alternativa",
+    description: "Jednoduše. Rychle. Stylově.",
+    img: "https://images.unsplash.com/photo-1721004635765-eae275f2eea5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     url: "/list",
-    bg: "bg-gradient-to-r from-cyan-50 to-green-200",
+    bg: "bg-gradient-to-r from-slate-100 to-black",
   },
   {
     id: 3,
-    title: "Špičkový hardware",
-    description: "Pro každodenní použití",
-    img: "https://images.unsplash.com/photo-1528845922818-cc5462be9a63?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Tvoje dávka, tvůj styl",
+    description: "Užij si nikotin kdekoliv",
+    img: "https://images.unsplash.com/photo-1682775399553-b2e250dc35f8?q=80&w=2036&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     url: "/list",
     bg: "bg-gradient-to-r from-green-50 to-yellow-100",
   },
@@ -53,10 +53,10 @@ const Slider = () => {
           >
             {/* TEXT CONTAINER */}
             <div className="h-1/2 xl:w-1/2 xl:h-full flex flex-col items-center justify-center gap-8 2xl:gap-12 text-center">
-              <h2 className="text-xl lg:text-3xl 2xl:text-5xl">
+              <h2 className="text-xl lg:text-2xl 2xl:text-4xl">
                 {slide.description}
               </h2>
-              <h1 className="text-4xl lg:text-5xl 2xl:text-7xl font-semibold">
+              <h1 className="text-3xl lg:text-4xl 2xl:text-6xl font-semibold px-10">
                 {slide.title}
               </h1>
               <Link href={slide.url}>
