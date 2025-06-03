@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { FaCartShopping } from "react-icons/fa6";
 // import NavIcons from "./NavIcons"
 
+
 const NavIcons = dynamic(() => import("./NavIcons"), { ssr: false });
 
 const Navbar = () => {
